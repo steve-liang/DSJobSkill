@@ -1,8 +1,7 @@
 ---
 title: "Scrape Data Scientist's Skills from Indeed.com"
 date: March 9, 2017
-output: md_document
-  variant: markdown_github
+output: github_document
 ---
 
 

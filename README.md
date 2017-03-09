@@ -1,6 +1,6 @@
 ---
-title: Scrape Data Scientist's Skills from Indeed.com
-date: Mar 9, 2017
+title: "Scrape Data Scientist's Skills from Indeed.com"
+date: "Mar 9, 2017"
 output: github_document
 ---
 
@@ -197,16 +197,16 @@ print(arrange(running, -count))
 ```
 ##      skill count
 ## 1        R    51
-## 2   Python    47
-## 3      SQL    36
-## 4     Java    31
-## 5      SAS    23
+## 2   Python    46
+## 3      SQL    37
+## 4     Java    30
+## 5      SAS    24
 ## 6    Excel    22
 ## 7   Hadoop    20
-## 8    Spark    17
+## 8    Spark    16
 ## 9  Tableau    11
 ## 10   NoSQL     7
-## 11     AWS     7
+## 11     AWS     6
 ## 12   Azure     2
 ```
 

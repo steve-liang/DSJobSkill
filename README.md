@@ -2,7 +2,7 @@
 title: "Scrape"
 author: "Steve Liang"
 date: "March 9, 2017"
-output: github_document
+output: html_document
 ---
 
 

@@ -47,8 +47,8 @@ cat(ADV_URL)
 start_page <- read_html(ADV_URL)
 
 job_count <- unlist(strsplit(start_page %>% 
-  html_node("#searchCount") %>%
-  html_text(), split = ' ')) 
+                               html_node("#searchCount") %>%
+                               html_text(), split = ' ')) 
 job_count <- as.numeric(job_count[length(job_count)])
 cat('Total job count: ', job_count)
 
@@ -72,19 +72,19 @@ if(job_count != 0){
 }
 
 for(p in 1:length(page.links)-1){
-
-    cat('Moving to Next 50 jobs\n')
-    
-    # Navigate to next page
-    new.page <- read_html(paste0(BASE_URL, page.links[p]))
-    
-    # Get new page job URLs
-    links <- new.page %>%
-      html_nodes("h2 a") %>%
-      html_attr('href')
-    
-    # Scrap job links
-    running <- ScrapeJobLinks(running, links)
+  
+  cat('Moving to Next 50 jobs\n')
+  
+  # Navigate to next page
+  new.page <- read_html(paste0(BASE_URL, page.links[p]))
+  
+  # Get new page job URLs
+  links <- new.page %>%
+    html_nodes("h2 a") %>%
+    html_attr('href')
+  
+  # Scrap job links
+  running <- ScrapeJobLinks(running, links)
   
 }
 
@@ -96,4 +96,3 @@ running$count<-running$count/job_count
 jt <- str_replace_all(job_title, '\\+|\\\"', ' ')
 loc <- str_replace_all(location, '\\%2C+|\\+',' ')
 ggplot(running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
-

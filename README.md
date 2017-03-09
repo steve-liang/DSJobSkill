@@ -1,7 +1,5 @@
 ---
 title: "Scrape Data Scientist's Skills from Indeed.com"
-author: "Steve Liang"
-date: "March 8, 2017"
 output: github_document
 ---
 
@@ -222,7 +220,8 @@ jt <- str_replace_all(job_title, '\\+|\\\"', ' ')
 loc <- str_replace_all(location, '\\%2C+|\\+',' ')
 
 # Visualization
-ggplot(running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
+ggplot(running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + 
+  labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
 ```
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)
@@ -272,8 +271,4 @@ job_title <- "\"Data+Analyst\""
 
 * Readers may try job title = 'Data Engineer' to see how the Skill ranking changes. My intuition is that Python would take a big lead than R in that area.
 * I would add in C family languages to really compare Java (apples to apples)
-
-
-
-
 

@@ -1,7 +1,8 @@
 ---
 title: "Scrape Data Scientist's Skills from Indeed.com"
 date: March 9, 2017
-output: github_document
+output: md_document
+  variant: markdown_github
 ---
 
 
@@ -36,9 +37,9 @@ https://www.indeed.com/jobs?as_and=&as_phr=&as_any=&as_not=&as_ttl=%22Data+Scien
 ```
 These following fields were assigned and translated into html
 
-* __&as_ttl=___%22Data+Scientist%22_
-* __&sr=___directhire_
-* __&l=___Chicago%2C+IL_
+* __&as_ttl=__ _%22Data+Scientist%22_
+* __&sr=__ _directhire_
+* __&l=__ _Chicago%2C+IL_
 
 There are several other fields can be assigned, but for our Data Scientist specific job analysis, these are good enough. You are encouraged to do your own criteria trying the other fields. We can start writing some code now.
 
@@ -226,7 +227,7 @@ ggplot(running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") +
   labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
 ```
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png)
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)
 
 # Takeaway
 

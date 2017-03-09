@@ -1,6 +1,6 @@
 ---
-title: "Scrape Data Scientist's Skills from Indeed.com"
-date: "Mar 9, 2017"
+title: Scrape Data Scientist's Skills from Indeed.com
+date: Mar 9, 2017
 output: github_document
 ---
 
@@ -8,7 +8,7 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Introduction
+## Introduction
 
 During my pursuit of becoming a data scientist, I've stumbled upon this specific topic multiple times
 
@@ -25,7 +25,7 @@ However, the reality to me is that, none of my previous work experience guided m
 
 My approach is to use R to implement a iterative web scraping from all data scientist job listings on Indeed.com. I'll elaborate with code further.
 
-# Indeed's Advanced Search
+## Indeed's Advanced Search
 
 Indeed.com is the largest US online job board, with a google-like interface and search engine, you can drill down with an [advanced search](https://www.indeed.com/advanced_search?q=Data+Scientist&l=Chicago%2C+IL&sort=date) where you can put in your search criteria. Here I want to specify job title that contains "_Data Scientist_" (this will include senior, junior or other possible prefix/suffix), location equals to "_Chicago, IL_" where I am located, and _exclude staffing agencies_ checked to remove potential duplicates. Additionally I select display _50_ listings per page sorted by _date_. This will help in our loop operation later on. 
 
@@ -198,7 +198,7 @@ ggplot(running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") +
 
 ```
 
-# Takeaway
+## Takeaway
 
 * R outranks Python in my limited(86) sample space. More than 60% of the job postings contain R in their descriptions. It's no doubt the most wanted skill for data scientists in Chicago
 * Python followed R as the second most popular, which is kind of surprising given that Python has been known a more in-demand skill than R
@@ -228,7 +228,7 @@ job_title <- "\"Data+Analyst\""
 
 ![](/figure/DataAnalystSkills.png)
 
-# Summary
+## Summary
 
 * R consistently outranks Python, with a thin edge though. This is unlike what [Jesse's finding](https://jessesw.com/Data-Science-Skills/) had told us 2 years ago
 * SQL follows at third place and 2nd place for Data Analyst jobs. We know for a fact that, SQL is a must everywhere
@@ -237,7 +237,7 @@ job_title <- "\"Data+Analyst\""
 * Java, in my opinion is the next language I should study after R and Python. I should compare C family languages in my keywords but just for now, I think this comparison still shows me how strong Java skill plays a role in job market
 * Tableau is surprisingly weak; my impression was that they had been really popular in Business Intelligence related job
 
-# Follow up?
+## Follow up?
 
 * Readers may try job title = 'Data Engineer' to see how the Skill ranking changes. My intuition is that Python would take a big lead than R in that area.
 * I would add in C family languages to really compare Java (apples to apples)

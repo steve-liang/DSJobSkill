@@ -1,5 +1,6 @@
 ---
 title: "Scrape Data Scientist's Skills from Indeed.com"
+date: March 9, 2017
 output: github_document
 ---
 
@@ -26,7 +27,7 @@ My approach is to use R to implement a iterative web scraping from all data scie
 
 Indeed.com is the largest US online job board, with a google-like interface and search engine, you can drill down with an [advanced search](https://www.indeed.com/advanced_search?q=Data+Scientist&l=Chicago%2C+IL&sort=date) where you can put in your search criteria. Here I want to specify job title that contains "_Data Scientist_" (this will include senior, junior or other possible prefix/suffix), location equals to "_Chicago, IL_" where I am located, and _exclude staffing agencies_ checked to remove potential duplicates. Additionally I select display _50_ listings per page sorted by _date_. This will help in our loop operation later on. 
 
-![](https://github.com/steve-liang/DSJobSkill/blob/master/AdvSearch.PNG)
+![](/AdvSearch.PNG)
 
 After you click __Find Jobs__, it yields a URL with all the specified fields and brings you to the result page. Take a closer look:
 
@@ -70,8 +71,8 @@ Now we've found the URL to the search result, we can proceed to next step.
 
 The URL directs you to the first page of the search result, which lists total number of jobs, first 50 jobs, and links to the 2nd and following pages at the bottom. 
 
-![](https://github.com/steve-liang/DSJobSkill/blob/master/StartPage1.PNG)
-![](https://github.com/steve-liang/DSJobSkill/blob/master/StartPage2.PNG)
+![](/StartPage1.PNG)
+![](/StartPage2.PNG)
 
 I am using Hadley Wickham's rvest pacakge for scraping operations. I am still learning it, but my impression is that this package has many signature features as other packages from Hadley. For example, the chain operation using %>% makes life easier. 
 
@@ -89,7 +90,7 @@ cat('Total job count: ', job_count)
 ```
 
 ```
-## Total job count:  86
+## Total job count:  82
 ```
 
 Scraping the job links and page link requires deeper knowledge in html. I spent quite some time to extract those two parts out. Jobs are under html nodes:_h2_ _a_, links for search result pages are more complex, I had to use XPath to find them out. It's almost a must knowing the basic of html/css. Good lesson for me. Hadley actually pointed out a useful tool [SelectorGadget](http://selectorgadget.com/) but I didn't find it to be effective on Indeed's website. Indeed's html appears to be unstructured. Not sure if they do that on purpose to prevent scarping or not. Anyhow, the code is much simpler than the process to reach them properly.
@@ -184,6 +185,7 @@ for(p in 1:length(page.links)-1){
   
 }
 ```
+
 Let's bring up the result sorted in descending order of occurrence:
 
 
@@ -194,17 +196,17 @@ print(arrange(running, -count))
 
 ```
 ##      skill count
-## 1        R    55
-## 2   Python    51
-## 3      SQL    40
-## 4     Java    34
-## 5      SAS    26
-## 6    Excel    24
-## 7   Hadoop    22
-## 8    Spark    18
+## 1        R    51
+## 2   Python    47
+## 3      SQL    36
+## 4     Java    31
+## 5      SAS    23
+## 6    Excel    22
+## 7   Hadoop    20
+## 8    Spark    17
 ## 9  Tableau    11
-## 10   NoSQL     8
-## 11     AWS     6
+## 10   NoSQL     7
+## 11     AWS     7
 ## 12   Azure     2
 ```
 
@@ -224,7 +226,7 @@ ggplot(running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") +
   labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png)
 
 # Takeaway
 
@@ -232,7 +234,7 @@ ggplot(running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") +
 * Python followed R as the second most popular, which is kind of surprising given that Python has been known a more in-demand skill than R
 * SAS has a strong presence. It's not open-source and. My explanation would be some big corporations use it due to legacy
 * Tableau is not as popular as I've seen on job postings
-* __I should increase my sample size__by looking at entire US
+* __I should increase my sample size__ by looking at entire US
 
 ## Nationwide
 
@@ -245,7 +247,7 @@ location <- "Nationwide"
 
 But to process it takes much longer because there are more than thousands of listings. Mine took less than 15 min for 2000+ iterations. YMMV. So be patient in your experiment.
 
-![](https://github.com/steve-liang/DSJobSkill/blob/master/Nationwide.png)
+![](/Nationwide.png)
 
 ## Data Analyst instead of Data Scientist?
 
@@ -256,7 +258,7 @@ I also wonder how much a Data Analyst's job would differ from Data Scientist's j
 job_title <- "\"Data+Analyst\""
 ```
 
-![](https://github.com/steve-liang/DSJobSkill/blob/master/DataAnalystSkills.png)
+![](/DataAnalystSkills.png)
 
 # Summary
 

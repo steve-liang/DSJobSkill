@@ -1,6 +1,5 @@
 ---
-title: "Scrape Data Scientists Skills from Indeedcom"
-date: Mar 9, 2017
+title: "Scrape Data Scientists Skills from Indeed.com"
 output: github_document
 ---
 

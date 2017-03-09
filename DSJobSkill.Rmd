@@ -2,7 +2,7 @@
 title: "Scrape Data Scientist's Skills from Indeed.com"
 author: "Steve Liang"
 date: "March 8, 2017"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}

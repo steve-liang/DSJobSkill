@@ -101,5 +101,6 @@ print(arrange(results$running, -count))
 results$running$count<-results$running$count/results$num_jobs
 jt <- str_replace_all(job_title, '\\+|\\\"', ' ')
 loc <- str_replace_all(location, '\\%2C+|\\+',' ')
-ggplot(results$running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + 
-  labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
+p <- ggplot(results$running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + 
+  labs(x = 'Skill', y = 'Occurrences (%)', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc)) 
+p + scale_y_continuous(labels = scales::percent, breaks = seq(0,1,0.1)) 

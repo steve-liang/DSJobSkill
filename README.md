@@ -90,7 +90,7 @@ cat('Total job count: ', job_count)
 ```
 
 ```
-## Total job count:  87
+## Total job count:  88
 ```
 
 Scraping the job links and page link requires deeper knowledge in html. I spent quite some time to extract those two parts out. Jobs are under html nodes:_h2_ _a_, links for search result pages are more complex, I had to use XPath to find them out. It's almost a must knowing the basic of html/css. Good lesson for me. Hadley actually pointed out a useful tool [SelectorGadget](http://selectorgadget.com/) but I didn't find it to be effective on Indeed's website. Indeed's html appears to be unstructured. Not sure if they do that on purpose to prevent scarping or not. Anyhow, the code is much simpler than the process to reach them properly.
@@ -202,11 +202,11 @@ print(arrange(results$running, -count))
 
 ```
 ##      skill count
-## 1        R    52
+## 1        R    53
 ## 2   Python    47
 ## 3      SQL    36
 ## 4     Java    32
-## 5      SAS    22
+## 5      SAS    23
 ## 6    Excel    22
 ## 7   Hadoop    21
 ## 8    Spark    17
@@ -228,8 +228,9 @@ jt <- str_replace_all(job_title, '\\+|\\\"', ' ')
 loc <- str_replace_all(location, '\\%2C+|\\+',' ')
 
 # Visualization
-ggplot(results$running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + 
-  labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
+p <- ggplot(results$running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + 
+  labs(x = 'Skill', y = 'Occurrences (%)', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc)) 
+p + scale_y_continuous(labels = scales::percent, breaks = seq(0,1,0.1)) 
 ```
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)

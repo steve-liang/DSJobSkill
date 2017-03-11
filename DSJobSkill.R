@@ -9,7 +9,7 @@ clean.text <- function(text)
 }
 
 # Given running total dataframe and links to scrape skills and compute running total
-ScrapeJobLinks <- function(running, job.links){
+ScrapeJobLinks <- function(res, job.links){
   for(i in 1:length(job.links)){
     job.url <- paste0(BASE_URL,job.links[i])
     
@@ -21,21 +21,22 @@ ScrapeJobLinks <- function(running, job.links){
       text <- html_text(html)
       text <- clean.text(text)
       df <- data.frame(skill = KEYWORDS, count = ifelse(str_detect(text, KEYWORDS), 1, 0))
-      running$count <- running$count + df$count
+      res$running$count <- res$running$count + df$count
+      res$num_jobs <- res$num_jobs + 1
     }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
   }
-  return(running)
+  return(res)
 }
 
 KEYWORDS <- c('Hadoop','Python','\\bSQL\\b', 'NoSQL','\\bR\\b', 'Spark', 'SAS', 'Excel', 'AWS', 'Azure', 'Java', 'Tableau')
 KEYWORDS_DISPLAY <- c('Hadoop','Python','SQL', 'NoSQL','R', 'Spark', 'SAS', 'Excel', 'AWS', 'Azure', 'Java', 'Tableau')
 
 # Indeed Search Words
-# job_title <- "\"Data+Analyst\""
-job_title <- "\"Data+Scientist\""
+job_title <- "\"Data+Analyst\""
+# job_title <- "\"Data+Scientist\""
 # job_title <- "\"Trader\""
 
-location <- 'New+York%2C+NY'
+location <- 'Nationwide'
 
 # use advanced search to get 50 results in a page
 BASE_URL <- 'https://www.indeed.com'
@@ -49,7 +50,7 @@ start_page <- read_html(ADV_URL)
 job_count <- unlist(strsplit(start_page %>% 
                                html_node("#searchCount") %>%
                                html_text(), split = ' ')) 
-job_count <- as.numeric(job_count[length(job_count)])
+job_count <- as.numeric(str_replace_all(job_count[length(job_count)],',',''))
 cat('Total job count: ', job_count)
 
 # Get start page job URLs
@@ -66,9 +67,15 @@ page.links <- start_page %>%
 # Create running total dataframe
 running <- data.frame(skill = KEYWORDS_DISPLAY, count = rep(0, length(KEYWORDS_DISPLAY)))
 
+# Since the indeed only display max of 20 pages from search result, we cannot use job_count but need to track by creating a num_jobs
+num_jobs <- 0
+
+# Here is our results object that contains the two stats
+results <- list("running" = running, "num_jobs" = num_jobs)
+
 if(job_count != 0){
   cat('Scraping jobs in Start Page\n')
-  running <- ScrapeJobLinks(running, links)
+  results <- ScrapeJobLinks(results, links)
 }
 
 for(p in 1:length(page.links)-1){
@@ -84,15 +91,14 @@ for(p in 1:length(page.links)-1){
     html_attr('href')
   
   # Scrap job links
-  running <- ScrapeJobLinks(running, links)
-  
+  results <- ScrapeJobLinks(results, links)
 }
 
 # running total
-print(arrange(running, -count))
+print(arrange(results$running, -count))
 
 # running total count as percentage
-running$count<-running$count/job_count
+results$running$count<-results$running$count/results$num_jobs
 jt <- str_replace_all(job_title, '\\+|\\\"', ' ')
 loc <- str_replace_all(location, '\\%2C+|\\+',' ')
-ggplot(running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
+ggplot(results$running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))

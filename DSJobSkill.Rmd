@@ -79,8 +79,8 @@ start_page <- read_html(ADV_URL)
 
 # get the total job count 
 job_count <- unlist(strsplit(start_page %>% 
-  html_node("#searchCount") %>%
-  html_text(), split = ' ')) 
+                               html_node("#searchCount") %>%
+                               html_text(), split = ' ')) 
 job_count <- as.numeric(str_replace_all(job_count[length(job_count)],',',''))
 cat('Total job count: ', job_count)
 ```
@@ -121,7 +121,7 @@ clean.text <- function(text)
 }
 
 # Given running total dataframe and links to scrape skills and compute running total
-ScrapeJobLinks <- function(running, job.links){
+ScrapeJobLinks <- function(res, job.links){
   for(i in 1:length(job.links)){
     job.url <- paste0(BASE_URL,job.links[i])
     
@@ -133,10 +133,11 @@ ScrapeJobLinks <- function(running, job.links){
       text <- html_text(html)
       text <- clean.text(text)
       df <- data.frame(skill = KEYWORDS, count = ifelse(str_detect(text, KEYWORDS), 1, 0))
-      running$count <- running$count + df$count
+      res$running$count <- res$running$count + df$count
+      res$num_jobs <- res$num_jobs + 1
     }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
   }
-  return(running)
+  return(res)
 }
 ```
 
@@ -149,29 +150,34 @@ Now we have the function ready, the links to scrape are ready. Let's run the pro
 # For display purpose, we also need the \\b removed from the keyword set
 KEYWORDS_DISPLAY <- c('Hadoop','Python','SQL', 'NoSQL','R', 'Spark', 'SAS', 'Excel', 'AWS', 'Azure', 'Java', 'Tableau')
 
-# Create empty running total dataframe
+# Create running total dataframe
 running <- data.frame(skill = KEYWORDS_DISPLAY, count = rep(0, length(KEYWORDS_DISPLAY)))
+
+# Since the indeed only display max of 20 pages from search result, we cannot use job_count but need to track by creating a num_jobs
+num_jobs <- 0
+
+# Here is our results object that contains the two stats
+results <- list("running" = running, "num_jobs" = num_jobs)
 
 if(job_count != 0){
   cat('Scraping jobs in Start Page\n')
-  running <- ScrapeJobLinks(running, links)
+  results <- ScrapeJobLinks(results, links)
 }
 
 for(p in 1:length(page.links)-1){
-
-    cat('Moving to Next 50 jobs\n')
-    
-    # Navigate to next page
-    new.page <- read_html(paste0(BASE_URL, page.links[p]))
-    
-    # Get new page job URLs
-    links <- new.page %>%
-      html_nodes("h2 a") %>%
-      html_attr('href')
-    
-    # Scrap job links
-    running <- ScrapeJobLinks(running, links)
   
+  cat('Moving to Next 50 jobs\n')
+  
+  # Navigate to next page
+  new.page <- read_html(paste0(BASE_URL, page.links[p]))
+  
+  # Get new page job URLs
+  links <- new.page %>%
+    html_nodes("h2 a") %>%
+    html_attr('href')
+  
+  # Scrap job links
+  results <- ScrapeJobLinks(results, links)
 }
 ```
 
@@ -179,21 +185,21 @@ Let's bring up the result sorted in descending order of occurrence:
 
 ```{r}
 # running total
-print(arrange(running, -count))
+print(arrange(results$running, -count))
 ```
 
 It's more informative to calculate the percentage of apperances, and visualize it using ggplot.
 
 ```{r}
 # running total count as percentage
-running$count<-running$count/job_count
+results$running$count<-results$running$count/results$num_jobs
 
 # Reformat the Job Title and Location to readable form
 jt <- str_replace_all(job_title, '\\+|\\\"', ' ')
 loc <- str_replace_all(location, '\\%2C+|\\+',' ')
 
 # Visualization
-ggplot(running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + 
+ggplot(results$running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + 
   labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
 
 ```
@@ -233,7 +239,6 @@ job_title <- "\"Data+Analyst\""
 * R consistently outranks Python, with a thin edge though. This is unlike what [Jesse's finding](https://jessesw.com/Data-Science-Skills/) had told us 2 years ago
 * SQL follows at third place and 2nd place for Data Analyst jobs. We know for a fact that, SQL is a must everywhere
 * SAS/Excel still display strong presense in job descriptions. For Data Analyst, Excel is almost the most wanted However; but be cautious that Data Analyst can be a title doing different job than data science. Data entry can also be titled Data Analyst. This is an overly generic title
-* Compare Nationwide to Chicago's result, occurrences of R/Python drop from 60% to 30%; I will need to seek an explanation
 * Java, in my opinion is the next language I should study after R and Python. I should compare C family languages in my keywords but just for now, I think this comparison still shows me how strong Java skill plays a role in job market
 * Tableau is surprisingly weak; my impression was that they had been really popular in Business Intelligence related job
 

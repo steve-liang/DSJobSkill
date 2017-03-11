@@ -32,11 +32,11 @@ KEYWORDS <- c('Hadoop','Python','\\bSQL\\b', 'NoSQL','\\bR\\b', 'Spark', 'SAS', 
 KEYWORDS_DISPLAY <- c('Hadoop','Python','SQL', 'NoSQL','R', 'Spark', 'SAS', 'Excel', 'AWS', 'Azure', 'Java', 'Tableau')
 
 # Indeed Search Words
-job_title <- "\"Data+Analyst\""
-# job_title <- "\"Data+Scientist\""
+# job_title <- "\"Data+Analyst\""
+job_title <- "\"Data+Scientist\""
 # job_title <- "\"Trader\""
 
-location <- 'Nationwide'
+location <- 'Chicago%2C+IL'
 
 # use advanced search to get 50 results in a page
 BASE_URL <- 'https://www.indeed.com'
@@ -101,4 +101,5 @@ print(arrange(results$running, -count))
 results$running$count<-results$running$count/results$num_jobs
 jt <- str_replace_all(job_title, '\\+|\\\"', ' ')
 loc <- str_replace_all(location, '\\%2C+|\\+',' ')
-ggplot(results$running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
+ggplot(results$running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + 
+  labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))

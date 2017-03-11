@@ -201,14 +201,12 @@ loc <- str_replace_all(location, '\\%2C+|\\+',' ')
 # Visualization
 ggplot(results$running, aes(reorder(skill,-count), count)) + geom_bar(stat="identity") + 
   labs(x = 'Skill', y = 'Count', title = paste0('Skill occurrences(%) for ', jt, ' in ', loc))
-
 ```
 
 ## Takeaway
 
-* R outranks Python in my limited(86) sample space. More than 60% of the job postings contain R in their descriptions. It's no doubt the most wanted skill for data scientists in Chicago
+* R outranks Python in my limited(86) sample space. Nearly 80% of the job postings contain R in their descriptions. It's no doubt the most wanted skill for data scientists in Chicago
 * Python followed R as the second most popular, which is kind of surprising given that Python has been known a more in-demand skill than R
-* SAS has a strong presence. It's not open-source and. My explanation would be some big corporations use it due to legacy
 * Tableau is not as popular as I've seen on job postings
 * __I should increase my sample size__ by looking at entire US
 
@@ -220,7 +218,7 @@ All you need is to change one line of code and re-run the whole script.
 location <- "Nationwide"
 ```
 
-But to process it takes much longer because there are more than thousands of listings. Mine took less than 15 min for 2000+ iterations. YMMV. So be patient in your experiment.
+But expanding it to Nationwide yields 2000+ listings and Indeed's only showing the first 50 pages of the search results which limits our total job possibly being scraped to be under 1000 (20 pages x 50 pages). I have not found a way to generate the rest of openings. But 1000 sample size is still considered very good for our purpose. The only problem is that processing it takes much longer because there are thousands of html files to scrape. Mine took longer than 15 min for 1000ish iterations. YMMV. So be patient in your experiment.
 
 ![](/figure/Nationwide.png)
 
@@ -237,8 +235,8 @@ job_title <- "\"Data+Analyst\""
 ## Summary
 
 * R consistently outranks Python, with a thin edge though. This is unlike what [Jesse's finding](https://jessesw.com/Data-Science-Skills/) had told us 2 years ago
-* SQL follows at third place and 2nd place for Data Analyst jobs. We know for a fact that, SQL is a must everywhere
-* SAS/Excel still display strong presense in job descriptions. For Data Analyst, Excel is almost the most wanted However; but be cautious that Data Analyst can be a title doing different job than data science. Data entry can also be titled Data Analyst. This is an overly generic title
+* SQL follows at third place and 2nd place for Data Analyst jobs. We know for a fact that, SQL is a minimum requirement for junior roles
+* SAS/Excel still display strong presense in job descriptions. For Data Analyst, Excel is the most wanted. However be cautious that Data Analyst can be a title doing different job than data science. Junior analyst at financial institutions can also be titled Data Analyst. This is an overly generic title
 * Java, in my opinion is the next language I should study after R and Python. I should compare C family languages in my keywords but just for now, I think this comparison still shows me how strong Java skill plays a role in job market
 * Tableau is surprisingly weak; my impression was that they had been really popular in Business Intelligence related job
 

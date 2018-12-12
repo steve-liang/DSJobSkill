@@ -1,12 +1,18 @@
 ---
 title: "Scrape Data Scientist's Skills from Indeed.com"
-date: "Mar 9, 2017"
+date: "Dec 11, 2018"
 output: github_document
 ---
 
+## UPDATE Dec 2018 
 
+#### Python surpass R, Spark made top skills for DS Job in both Chicago and USA Nationwide
 
-## Introduction
+![Python surpass R, Spark made to 4th for DS Job in Chicago](figure/DS_Chicago_20181211.png)
+
+![Python surpass R, Spark made to 5th for DS Job in USA Nationwide](figure/DS_USA_20181211.png)
+
+## Introduction (all below are from Dec 2016)
 
 During my pursuit of becoming a data scientist, I've stumbled upon this specific topic multiple times
 
@@ -27,7 +33,7 @@ My approach is to use R to implement a iterative web scraping from all data scie
 
 Indeed.com is the largest US online job board, with a google-like interface and search engine, you can drill down with an [advanced search](https://www.indeed.com/advanced_search?q=Data+Scientist&l=Chicago%2C+IL&sort=date) where you can put in your search criteria. Here I want to specify job title that contains "_Data Scientist_" (this will include senior, junior or other possible prefix/suffix), location equals to "_Chicago, IL_" where I am located, and _exclude staffing agencies_ checked to remove potential duplicates. Additionally I select display _50_ listings per page sorted by _date_. This will help in our loop operation later on. 
 
-![](/figure/AdvSearch.PNG)
+![](figure/AdvSearch.PNG)
 
 After you click __Find Jobs__, it yields a URL with all the specified fields and brings you to the result page. Take a closer look:
 
@@ -71,8 +77,8 @@ Now we've found the URL to the search result, we can proceed to next step.
 
 The URL directs you to the first page of the search result, which lists total number of jobs, first 50 jobs, and links to the 2nd and following pages at the bottom. 
 
-![](/figure/StartPage1.PNG)
-![](/figure/StartPage2.PNG)
+![](figure/StartPage1.PNG)
+![](figure/StartPage2.PNG)
 
 I am using Hadley Wickham's rvest pacakge for scraping operations. I am still learning it, but my impression is that this package has many signature features as other packages from Hadley. For example, the chain operation using %>% makes life easier. 
 
@@ -253,7 +259,7 @@ location <- "Nationwide"
 
 But expanding it to Nationwide yields 2000+ listings and Indeed's only showing the first 20 pages of the search results which limits our total job possibly being scraped to be under 1000 (20 pages x 50 pages). I have not found a way to generate the rest of openings. But 1000 sample size is still considered very good for our purpose. The only problem is that processing it takes much longer because there are thousands of html files to scrape. Mine took longer than 15 min for 1000ish iterations. YMMV. So be patient in your experiment.
 
-![](/figure/Nationwide.png)
+![](figure/Nationwide.png)
 
 ## Data Analyst instead of Data Scientist?
 
@@ -264,7 +270,7 @@ I also wonder how much a Data Analyst's job would differ from Data Scientist's j
 job_title <- "\"Data+Analyst\""
 ```
 
-![](/figure/DataAnalystSkills.png)
+![](figure/DataAnalystSkills.png)
 
 ## Summary
 

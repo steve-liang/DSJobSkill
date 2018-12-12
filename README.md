@@ -6,7 +6,7 @@ output: github_document
 
 ## UPDATE Dec 2018 
 
-#### Python surpass R, Spark made top skills for DS Job in both Chicago and USA Nationwide
+#### Python surpasses R, Spark outranks Hadoop for DS Job in both Chicago and USA Nationwide
 
 ![Python surpass R, Spark made to 4th for DS Job in Chicago](figure/DS_Chicago_20181211.png)
 

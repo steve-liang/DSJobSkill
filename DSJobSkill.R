@@ -50,7 +50,7 @@ start_page <- read_html(ADV_URL)
 job_count <- unlist(strsplit(start_page %>% 
                                html_node("#searchCount") %>%
                                html_text(), split = ' ')) 
-job_count <- as.numeric(job_count[length(job_count) - 1])
+job_count <- as.numeric(str_replace_all(job_count[length(job_count) - 1], pattern = ',', replacement = ''))
 cat('Total job count: ', job_count)
 
 # Get start page job URLs
